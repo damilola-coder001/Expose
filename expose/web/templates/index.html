@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EXPOSE — Security Intelligence Platform</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%237B2FBE'/%3E%3Cpath d='M16 18h32v28H16z' fill='none' stroke='white' stroke-width='5'/%3E%3C/svg%3E">
+  <meta name="description" content="Production website security intelligence platform. Evidence first. Intelligence second.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="navbar" role="banner">
+    <div class="container nav-content">
+      <div class="brand">
+        <span class="logo-mark">EXPOSE</span>
+        <span class="version-tag font-mono">v0.1.0</span>
+      </div>
+      <div class="nav-badges">
+        <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle light and dark theme" title="Toggle theme (Light / Dark)">
+          <svg class="theme-icon icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="theme-icon icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+          <span class="theme-toggle-label" id="themeToggleText">Dark</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container" id="mainContent">
+    <!-- Hero / Scanner Input Section -->
+    <section class="hero-section" aria-labelledby="heroTitle">
+      <div class="hero-layout">
+        <!-- Cyber Robot Mascot -->
+        <div class="robot-mascot" aria-hidden="true">
+          <svg class="robot-svg" viewBox="0 0 280 360" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="helmetGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#7B2FBE"/>
+                <stop offset="35%" style="stop-color:#3B82F6"/>
+                <stop offset="65%" style="stop-color:#D946EF"/>
+                <stop offset="100%" style="stop-color:#F59E0B"/>
+              </linearGradient>
+              <linearGradient id="visorGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#EC4899"/>
+                <stop offset="50%" style="stop-color:#8B5CF6"/>
+                <stop offset="100%" style="stop-color:#3B82F6"/>
+              </linearGradient>
+              <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#1a1a2e"/>
+                <stop offset="50%" style="stop-color:#0f0f1a"/>
+                <stop offset="100%" style="stop-color:#1a1a2e"/>
+              </linearGradient>
+              <linearGradient id="accentGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#F59E0B"/>
+                <stop offset="100%" style="stop-color:#D97706"/>
+              </linearGradient>
+              <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#7B2FBE;stop-opacity:0.6"/>
+                <stop offset="100%" style="stop-color:#3B82F6;stop-opacity:0.6"/>
+              </linearGradient>
+              <filter id="robotGlow">
+                <feGaussianBlur stdDeviation="3" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+              <filter id="innerGlow">
+                <feGaussianBlur stdDeviation="6" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+
+            <!-- Ambient glow behind robot -->
+            <ellipse cx="140" cy="340" rx="90" ry="12" fill="url(#visorGrad)" opacity="0.15">
+              <animate attributeName="rx" values="90;100;90" dur="3s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="0.15;0.25;0.15" dur="3s" repeatCount="indefinite"/>
+            </ellipse>
+
+            <!-- Body / Torso -->
+            <path d="M90,200 Q90,180 110,170 L170,170 Q190,180 190,200 L195,310 Q195,325 180,330 L100,330 Q85,325 85,310 Z" fill="url(#bodyGrad)" stroke="url(#helmetGrad)" stroke-width="1.5" opacity="0.95"/>
+            
+            <!-- Chest Plate -->
+            <path d="M105,190 L175,190 L180,280 Q180,295 165,300 L115,300 Q100,295 100,280 Z" fill="#0d0d1a" stroke="url(#visorGrad)" stroke-width="1" opacity="0.8"/>
+            
+            <!-- Chest Core (shield icon) -->
+            <g transform="translate(140,240)" filter="url(#robotGlow)">
+              <path d="M0,-28 L22,-18 L22,6 Q22,22 0,32 Q-22,22 -22,6 L-22,-18 Z" fill="url(#shieldGrad)" stroke="#8B5CF6" stroke-width="1.5">
+                <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite"/>
+              </path>
+              <path d="M-6,-8 L-2,4 L10,-10" fill="none" stroke="#D946EF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <animate attributeName="stroke" values="#D946EF;#EC4899;#D946EF" dur="2s" repeatCount="indefinite"/>
+              </path>
+            </g>
+
+            <!-- Gold accent lines on torso -->
+            <line x1="105" y1="195" x2="105" y2="290" stroke="url(#accentGrad)" stroke-width="2" opacity="0.6"/>
+            <line x1="175" y1="195" x2="175" y2="290" stroke="url(#accentGrad)" stroke-width="2" opacity="0.6"/>
+
+            <!-- Neck -->
+            <rect x="120" y="155" width="40" height="20" rx="4" fill="#1a1a2e" stroke="#7B2FBE" stroke-width="1" opacity="0.9"/>
+            <line x1="130" y1="160" x2="130" y2="170" stroke="#D946EF" stroke-width="1" opacity="0.5"/>
+            <line x1="140" y1="158" x2="140" y2="172" stroke="#3B82F6" stroke-width="1" opacity="0.5"/>
+            <line x1="150" y1="160" x2="150" y2="170" stroke="#D946EF" stroke-width="1" opacity="0.5"/>
+
+            <!-- Helmet / Head -->
+            <path d="M85,110 Q85,40 140,35 Q195,40 195,110 L195,140 Q195,158 140,160 Q85,158 85,140 Z" fill="url(#bodyGrad)" stroke="url(#helmetGrad)" stroke-width="2"/>
+            
+            <!-- Helmet Ridge -->
+            <path d="M110,38 Q140,25 170,38" fill="none" stroke="url(#accentGrad)" stroke-width="3" stroke-linecap="round"/>
+            <path d="M100,42 Q140,28 180,42" fill="none" stroke="url(#helmetGrad)" stroke-width="1.5" opacity="0.5"/>
+
+            <!-- Visor -->
+            <path d="M95,85 Q95,65 140,62 Q185,65 185,85 L185,120 Q185,140 140,145 Q95,140 95,120 Z" fill="url(#visorGrad)" opacity="0.35"/>
+            <path d="M100,88 Q100,70 140,67 Q180,70 180,88 L180,118 Q180,135 140,140 Q100,135 100,118 Z" fill="url(#visorGrad)" opacity="0.2">
+              <animate attributeName="opacity" values="0.2;0.35;0.2" dur="3s" repeatCount="indefinite"/>
+            </path>
+
+            <!-- Eyes -->
+            <g filter="url(#robotGlow)">
+              <ellipse cx="120" cy="100" rx="14" ry="10" fill="#0a0a12" stroke="#D946EF" stroke-width="1.5"/>
+              <ellipse cx="120" cy="100" rx="6" ry="5" fill="#D946EF">
+                <animate attributeName="rx" values="6;4;6" dur="4s" repeatCount="indefinite"/>
+                <animate attributeName="fill" values="#D946EF;#EC4899;#D946EF" dur="3s" repeatCount="indefinite"/>
+              </ellipse>
+              <ellipse cx="160" cy="100" rx="14" ry="10" fill="#0a0a12" stroke="#3B82F6" stroke-width="1.5"/>
+              <ellipse cx="160" cy="100" rx="6" ry="5" fill="#3B82F6">
+                <animate attributeName="rx" values="6;4;6" dur="4s" repeatCount="indefinite"/>
+                <animate attributeName="fill" values="#3B82F6;#8B5CF6;#3B82F6" dur="3s" repeatCount="indefinite"/>
+              </ellipse>
+            </g>
+
+            <!-- Shoulder Pads -->
+            <path d="M85,185 Q60,180 55,200 L60,220 Q65,225 75,220 L90,200 Z" fill="url(#bodyGrad)" stroke="url(#helmetGrad)" stroke-width="1.5"/>
+            <path d="M195,185 Q220,180 225,200 L220,220 Q215,225 205,220 L190,200 Z" fill="url(#bodyGrad)" stroke="url(#helmetGrad)" stroke-width="1.5"/>
+            
+            <!-- Shoulder accent dots -->
+            <circle cx="70" cy="205" r="3" fill="#F59E0B" opacity="0.8">
+              <animate attributeName="opacity" values="0.8;0.3;0.8" dur="2.5s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="210" cy="205" r="3" fill="#F59E0B" opacity="0.8">
+              <animate attributeName="opacity" values="0.8;0.3;0.8" dur="2.5s" repeatCount="indefinite" begin="0.5s"/>
+            </circle>
+
+            <!-- Arms -->
+            <path d="M55,220 L45,270 Q42,285 50,290 L60,288 L72,240" fill="none" stroke="url(#helmetGrad)" stroke-width="3" stroke-linecap="round"/>
+            <path d="M225,220 L235,270 Q238,285 230,290 L220,288 L208,240" fill="none" stroke="url(#helmetGrad)" stroke-width="3" stroke-linecap="round"/>
+            
+            <!-- Hand circles -->
+            <circle cx="55" cy="290" r="8" fill="url(#bodyGrad)" stroke="#D946EF" stroke-width="1.5"/>
+            <circle cx="225" cy="290" r="8" fill="url(#bodyGrad)" stroke="#3B82F6" stroke-width="1.5"/>
+
+            <!-- Scanning beam from right hand -->
+            <line x1="225" y1="290" x2="260" y2="320" stroke="#3B82F6" stroke-width="1" opacity="0.4">
+              <animate attributeName="opacity" values="0.4;0.8;0.4" dur="1.5s" repeatCount="indefinite"/>
+            </line>
+            <circle cx="260" cy="320" r="3" fill="#3B82F6" opacity="0.6">
+              <animate attributeName="r" values="3;5;3" dur="1.5s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="0.6;0.2;0.6" dur="1.5s" repeatCount="indefinite"/>
+            </circle>
+          </svg>
+          <div class="robot-label">EXPOSE SENTINEL</div>
+        </div>
+
+        <!-- Hero Text -->
+        <div class="hero-text-block">
+          <h1 class="hero-title" id="heroTitle">See what your website <em>exposes.</em></h1>
+          <p class="hero-subtitle">
+            Paste any website URL to receive an externally observable security assessment.
+            Every finding is validated by empirical wire proof — no hallucinations, no guessing.
+          </p>
+        </div>
+      </div>
+
+      <!-- Input Form -->
+      <div class="search-card">
+        <form id="scanForm" class="scan-form" role="search" aria-label="Website security assessment input">
+          <div class="input-wrapper">
+            <span class="input-prefix font-mono" aria-hidden="true">https://</span>
+            <input 
+              type="text" 
+              id="targetInput" 
+              class="target-input" 
+              placeholder="example.com" 
+              required 
+              autocomplete="off" 
+              spellcheck="false"
+              aria-label="Website domain or URL to scan"
+            />
+          </div>
+          <button type="submit" id="analyzeBtn" class="btn btn-primary">
+            <span>Analyze Website</span>
+            <svg class="btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </form>
+        <div class="options-bar">
+          <label class="toggle-label">
+            <input type="checkbox" id="allowPrivateToggle" />
+            <span class="toggle-text">Allow Private / Internal IP Scope (Development Lab mode)</span>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- Scanning Progress State -->
+    <section id="scanningState" class="scanning-state hidden" aria-live="polite">
+      <div class="scanning-card">
+        <div class="spinner-ring" aria-hidden="true"></div>
+        <h3 id="scanProgressTitle">Analyzing Security Posture...</h3>
+        <p id="scanProgressSubtitle" class="progress-sub">Executing unauthenticated protocol probes against target...</p>
+        <div class="probe-indicators" role="progressbar" aria-label="Scanning stages">
+          <div class="probe-pill" id="stage-connecting">1. Connecting</div>
+          <div class="probe-pill" id="stage-fetching">2. Fetching Website</div>
+          <div class="probe-pill" id="stage-tls">3. Analyzing TLS</div>
+          <div class="probe-pill" id="stage-headers">4. Inspecting Headers</div>
+          <div class="probe-pill" id="stage-assets">5. Discovering Assets</div>
+          <div class="probe-pill" id="stage-rules">6. Security Rules</div>
+          <div class="probe-pill" id="stage-validating">7. Validating Findings</div>
+          <div class="probe-pill" id="stage-risk">8. Calculating Risk</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Error Banner -->
+    <section id="errorBanner" class="error-banner hidden" role="alert">
+      <div class="error-content">
+        <span class="error-icon" aria-hidden="true">!</span>
+        <div>
+          <strong id="errorTitle"></strong>
+          <p id="errorMessage"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results Section -->
+    <section id="resultsSection" class="results-section hidden" aria-label="Security Assessment Report">
+      
+      <!-- 1. Report Header Bar -->
+      <header class="report-header-card">
+        <div class="report-header-main">
+          <div class="report-header-target">
+            <div class="report-header-pill">
+              <span class="pulse-dot" aria-hidden="true"></span>
+              <span>SECURITY REPORT</span>
+            </div>
+            <h2 class="report-target-title font-mono" id="resTargetUrl">example.com</h2>
+            <div class="report-meta-tags">
+              <span class="meta-tag font-mono" id="resTargetPort">443 (HTTPS)</span>
+              <span class="meta-tag font-mono" id="resTargetIps">Resolved IP: --</span>
+              <span class="meta-tag" id="resTimestampBadge">Scanned just now</span>
+              <span class="meta-tag font-mono" id="resDuration">--s</span>
+              <span class="meta-tag font-mono" id="resScanId">--</span>
+            </div>
+          </div>
+          
+          <div class="report-header-actions">
+            <button id="rescanBtn" class="btn btn-sm btn-outline" title="Re-run assessment against this target">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+              <span>Rescan</span>
+            </button>
+            <button id="shareReportBtn" class="btn btn-sm btn-outline" title="Copy shareable report permalink">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+              <span>Share</span>
+            </button>
+            <button id="downloadJsonBtn" class="btn btn-sm btn-outline" title="Export sanitized JSON report">
+              <span>Export JSON</span>
+            </button>
+            <button id="downloadSarifBtn" class="btn btn-sm btn-outline" title="Export OASIS SARIF v2.1.0 for CI/CD pipelines">
+              <span>Export SARIF 2.1.0</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- 2. Sticky Report Navigation Bar -->
+      <nav class="report-nav-bar" id="reportNavBar" aria-label="Report sections navigation">
+        <div class="nav-bar-inner">
+          <a href="#sec-overview" class="nav-tab active" data-sec="sec-overview">Overview</a>
+          <a href="#sec-fix-first" class="nav-tab" data-sec="sec-fix-first">Priority Issues <span class="nav-pill-count" id="navCountFixFirst">0</span></a>
+          <a href="#sec-categories" class="nav-tab" data-sec="sec-categories">Categories</a>
+          <a href="#sec-attack-surface" class="nav-tab" data-sec="sec-attack-surface">Attack Surface</a>
+          <a href="#sec-diagnostics" class="nav-tab" data-sec="sec-diagnostics">Observations <span class="nav-pill-count" id="navCountDiagnostics">0</span></a>
+          <a href="#sec-passed" class="nav-tab" data-sec="sec-passed">Passed Controls <span class="nav-pill-count" id="navCountPassed">0</span></a>
+          <a href="#sec-history" class="nav-tab" data-sec="sec-history">Posture History</a>
+          <a href="#sec-not-assessed" class="nav-tab" data-sec="sec-not-assessed">Scope Boundaries</a>
+          <a href="#sec-telemetry" class="nav-tab" data-sec="sec-telemetry">Telemetry</a>
+        </div>
+      </nav>
+
+      <!-- 3. Security Score Hero & Executive Summary Section -->
+      <section class="score-hero-card" id="sec-overview" aria-labelledby="scoreHeroHeading">
+        <div class="score-hero-grid">
+          <!-- Left: Score Radial Anchor -->
+          <div class="score-radial-block">
+            <span class="score-brand-tag font-mono" id="scoreHeroHeading">SECURITY SCORE</span>
+            <div class="radial-container">
+              <svg class="radial-svg" viewBox="0 0 120 120" aria-hidden="true">
+                <circle class="radial-bg" cx="60" cy="60" r="50"/>
+                <circle id="radialProgress" class="radial-fg" cx="60" cy="60" r="50"/>
+              </svg>
+              <div class="radial-content">
+                <span id="scoreValue" class="score-number">--</span>
+                <span class="score-max-scale font-mono">/ 100</span>
+              </div>
+            </div>
+            
+            <div class="grade-badge" id="gradeBadge">GRADE --</div>
+            <div class="score-exact-display font-mono" id="scoreExactDisplay">Security Score: -- / 100</div>
+
+            <button class="btn-link score-how-btn" id="openScoreModalBtn">
+              <span>How is this calculated?</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </button>
+          </div>
+
+          <!-- Right: Executive Summary & Action Callout -->
+          <div class="exec-summary-block">
+            <div class="exec-verdict-header">
+              <span class="verdict-label font-mono">EXECUTIVE SUMMARY</span>
+              <h3 class="exec-verdict-title" id="execVerdictTitle">Evaluating security posture...</h3>
+            </div>
+            
+            <p class="exec-summary-text" id="execSummaryText">
+              Your website's external perimeter has been scanned for observable security configurations, transport protections, and exposed technical surfaces.
+            </p>
+
+            <div class="exec-key-issues" id="execKeyIssuesContainer">
+              <span class="exec-key-label font-mono">PRIMARY FOCUS AREAS:</span>
+              <ul class="exec-issues-list" id="execKeyIssuesList">
+                <li>Analyzing security controls...</li>
+              </ul>
+            </div>
+
+            <div class="score-philosophy-box">
+              <p class="score-philosophy-subtext" id="scorePhilosophyText">
+                This score reflects the externally observable security controls and findings assessed by Expose. The score is not a guarantee that a website is secure.
+              </p>
+            </div>
+
+            <div class="exec-cta-row">
+              <button class="btn btn-primary btn-start-fixing" id="startFixingBtn">
+                <span>Review Priority Issues</span>
+                <span class="btn-subtext font-mono" id="startFixingCount">(0 issues)</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
+              <div class="exec-tally-pill" id="scoreHeroTally">
+                <span id="heroIssueCount">0</span> issues to address &bull; <span id="heroPassedCount">0</span> passed
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Hero Action Area: Fix These First -->
+      <section class="report-section" id="sec-fix-first" aria-labelledby="fixFirstTitle">
+        <div class="section-header">
+          <div class="section-header-title">
+            <div class="section-header-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <div>
+              <h2 id="fixFirstTitle">Priority Remediation</h2>
+              <p class="section-subtitle">Ranked by risk and exploitability. Address these high-impact perimeter vulnerabilities first.</p>
+            </div>
+          </div>
+          <div class="fix-first-counter-badge font-mono" id="fixFirstCounterBadge">
+            3 prioritized issues
+          </div>
+        </div>
+        <div class="fix-first-container" id="fixFirstContainer">
+          <!-- Dynamically populated with prioritized findings (Finding #1 expanded by default) -->
+        </div>
+      </section>
+
+      <!-- 5. Interactive Filter & Search Bar -->
+      <section class="filter-search-toolbar" aria-label="Findings filtering and search">
+        <div class="search-input-wrapper">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input 
+            type="text" 
+            id="findingSearchInput" 
+            class="finding-search-input" 
+            placeholder="Search findings by title, category, CWE, OWASP, or ID..." 
+            aria-label="Filter findings by keyword"
+          />
+          <button id="clearSearchBtn" class="clear-search-btn hidden" aria-label="Clear search query">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+
+        <div class="severity-counts-bar" id="severityCountsBar" role="tablist" aria-label="Filter findings by severity">
+          <button class="sev-count-item active" data-filter="ALL" id="filterAll" role="tab" aria-selected="true">
+            <span class="sev-count-lbl">All Issues</span>
+            <span class="sev-count-num font-mono" id="countAll">0</span>
+          </button>
+          <button class="sev-count-item sev-count-critical" data-filter="CRITICAL" id="filterCritical" role="tab" aria-selected="false">
+            <span class="sev-count-lbl">Critical</span>
+            <span class="sev-count-num font-mono" id="countCritical">0</span>
+          </button>
+          <button class="sev-count-item sev-count-high" data-filter="HIGH" id="filterHigh" role="tab" aria-selected="false">
+            <span class="sev-count-lbl">High</span>
+            <span class="sev-count-num font-mono" id="countHigh">0</span>
+          </button>
+          <button class="sev-count-item sev-count-medium" data-filter="MEDIUM" id="filterMedium" role="tab" aria-selected="false">
+            <span class="sev-count-lbl">Medium</span>
+            <span class="sev-count-num font-mono" id="countMedium">0</span>
+          </button>
+          <button class="sev-count-item sev-count-low" data-filter="LOW" id="filterLow" role="tab" aria-selected="false">
+            <span class="sev-count-lbl">Low</span>
+            <span class="sev-count-num font-mono" id="countLow">0</span>
+          </button>
+          <button class="sev-count-item sev-count-passed" data-filter="PASSED" id="filterPassed" role="tab" aria-selected="false">
+            <span class="sev-count-lbl">Passed</span>
+            <span class="sev-count-num font-mono" id="countPassed">0</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- 6. Security Categories Section -->
+      <section class="report-section" id="sec-categories" aria-labelledby="categoriesTitle">
+        <div class="section-header">
+          <div class="section-header-title">
+            <div class="section-header-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            </div>
+            <div>
+              <h2 id="categoriesTitle">Security Categories</h2>
+              <p class="section-subtitle">Independent category scores evaluated across 9 canonical security domains.</p>
+            </div>
+          </div>
+          <button class="btn btn-sm btn-outline" id="viewAllCategoriesBtn" onclick="resetCategoryFilter()">Show All</button>
+        </div>
+        <div class="category-grid" id="categoryCardsContainer">
+          <!-- Dynamically populated with horizontal progress meter cards -->
+        </div>
+      </section>
+
+      <!-- 7. Attack Surface Discovery Section -->
+      <section class="report-section" id="sec-attack-surface" aria-labelledby="attackSurfaceTitle">
+        <div class="section-header">
+          <div class="section-header-title">
+            <div class="section-header-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            </div>
+            <div>
+              <h2 id="attackSurfaceTitle">Attack Surface Discovery</h2>
+              <p class="section-subtitle">Publicly observable attack surface mapped across discovered endpoints, assets, and external integrations.</p>
+            </div>
+          </div>
+          <div class="attack-surface-total-badge font-mono" id="attackSurfaceTotalBadge">
+            -- public assets mapped
+          </div>
+        </div>
+
+        <div class="attack-surface-card">
+          <!-- Summary Metrics Strip -->
+          <div class="attack-metrics-strip" id="attackMetricsStrip">
+            <div class="metric-block" id="metricPages">
+              <span class="metric-num font-mono">0</span>
+              <span class="metric-label">Pages</span>
+            </div>
+            <div class="metric-block" id="metricApis">
+              <span class="metric-num font-mono">0</span>
+              <span class="metric-label">APIs &amp; Endpoints</span>
+            </div>
+            <div class="metric-block" id="metricScripts">
+              <span class="metric-num font-mono">0</span>
+              <span class="metric-label">Scripts</span>
+            </div>
+            <div class="metric-block" id="metricForms">
+              <span class="metric-num font-mono">0</span>
+              <span class="metric-label">Forms</span>
+            </div>
+            <div class="metric-block" id="metricOrigins">
+              <span class="metric-num font-mono">0</span>
+              <span class="metric-label">External Origins</span>
+            </div>
+          </div>
+
+          <!-- Attack Surface Tabs -->
+          <div class="attack-surface-tabs" role="tablist">
+            <button class="as-tab active" data-tab="pages" role="tab" aria-selected="true">Pages (<span id="asTabPagesCount">0</span>)</button>
+            <button class="as-tab" data-tab="apis" role="tab" aria-selected="false">APIs &amp; Routes (<span id="asTabApisCount">0</span>)</button>
+            <button class="as-tab" data-tab="scripts" role="tab" aria-selected="false">Scripts (<span id="asTabScriptsCount">0</span>)</button>
+            <button class="as-tab" data-tab="forms" role="tab" aria-selected="false">Forms (<span id="asTabFormsCount">0</span>)</button>
+            <button class="as-tab" data-tab="dependencies" role="tab" aria-selected="false">External Origins (<span id="asTabDepsCount">0</span>)</button>
+            <button class="as-tab" data-tab="robots" role="tab" aria-selected="false">Robots &amp; Sitemap</button>
+          </div>
+
+          <!-- Attack Surface Panes -->
+          <div class="attack-surface-content" id="attackSurfaceContent">
+            <!-- Dynamically populated based on active tab -->
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. Diagnostics Section (Domain-Grouped Technical Observations) -->
+      <section class="report-section" id="sec-diagnostics" aria-labelledby="diagnosticsTitle">
+        <div class="section-header">
+          <div class="section-header-title">
+            <div class="section-header-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+            </div>
+            <div>
+              <h2 id="diagnosticsTitle">Technical Observations &amp; Diagnostics</h2>
+              <p class="section-subtitle">Technical observations &amp; confirmed flaws requiring remediation, organized by domain.</p>
+            </div>
+          </div>
+          <div class="diagnostics-filter-indicator font-mono" id="diagFilterIndicator">
+            Filter: All Categories
+          </div>
+        </div>
+        <div class="findings-container" id="diagnosticsContainer">
+          <!-- Dynamically populated with domain-grouped findings -->
+        </div>
+      </section>
+
+      <!-- 9. Passed Checks Section -->
+      <section class="report-section" id="sec-passed" aria-labelledby="passedTitle">
+        <div class="section-header section-toggle" id="passedToggle" role="button" tabindex="0" aria-expanded="true">
+          <div class="section-header-title">
+            <div class="section-header-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--sev-passed)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div>
+              <h2 id="passedTitle">Passed Controls (<span id="passedHeaderCount">0</span>)</h2>
+              <p class="section-subtitle">Verified security controls observed active and compliant on the wire.</p>
+            </div>
+          </div>
+          <span class="toggle-hint" id="passedToggleHint">Click to collapse</span>
+        </div>
+        <div class="passed-container" id="passedContainer">
+          <!-- Dynamically populated with passing checks -->
+        </div>
+      </section>
+
+      <!-- 10. Security History & Continuous Monitoring Diff -->
+      <section class="report-section hidden" id="sec-history" aria-labelledby="historyTitle">
+        <div class="section-header">
+          <div class="section-header-title">
+            <div class="section-header-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            </div>
+            <div>
+              <h2 id="historyTitle">Security Posture History &amp; Continuous Diff</h2>
+              <p class="section-subtitle" id="historySubtitle">Timeline of prior scans and verified security posture changes for this target.</p>
+            </div>
+          </div>
+          <div class="monitoring-status-pill">
+            <span class="pulse-dot green" aria-hidden="true"></span>
+            <span>Continuous Monitoring Active</span>
+          </div>
+        </div>
+        <div class="history-diff-container" id="historyDiffContainer">
+          <!-- Dynamically populated -->
+        </div>
+      </section>
+
+      <!-- 11. Not Assessed Boundaries Section -->
+      <section class="report-section" id="sec-not-assessed" aria-labelledby="boundariesTitle">
+        <div class="section-header">
+          <div class="section-header-title">
+            <div class="section-header-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <div>
+              <h2 id="boundariesTitle">Scope Boundaries &amp; Limitations</h2>
+              <p class="section-subtitle">Explicit assessment limitations &amp; out-of-scope boundaries for unauthenticated external analysis.</p>
+            </div>
+          </div>
+        </div>
+        <div class="boundary-list" id="boundaryList">
+          <!-- Dynamically populated with boundary items -->
+        </div>
+      </section>
+
+      <!-- 12. Technical Details & Telemetry Section -->
+      <section class="report-section" id="sec-telemetry" aria-labelledby="telemetryTitle">
+        <div class="section-header">
+          <div class="section-header-title">
+            <div class="section-header-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </div>
+            <div>
+              <h2 id="telemetryTitle">Technical Execution Telemetry</h2>
+              <p class="section-subtitle">Scanner operational telemetry, execution timing, and reproducible validation records.</p>
+            </div>
+          </div>
+        </div>
+        <div class="telemetry-card">
+          <div class="telemetry-grid" id="telemetryGrid">
+            <!-- Dynamically populated with operational trace data -->
+          </div>
+        </div>
+      </section>
+
+    </section>
+  </main>
+
+  <!-- Score Methodology Modal -->
+  <div class="modal-backdrop hidden" id="scoreModalBackdrop" role="dialog" aria-modal="true" aria-labelledby="scoreModalTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-block">
+          <span class="badge badge-cyan font-mono">SCORING METHODOLOGY v1.0</span>
+          <h3 id="scoreModalTitle">How Security Score is Calculated</h3>
+        </div>
+        <button class="modal-close-btn" id="closeScoreModalBtn" aria-label="Close modal">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-intro">
+          Expose evaluates security posture using an objective, deterministic 100-point scale across 9 canonical security categories.
+          Deductions are only applied for verified empirical findings, scaled by severity and confidence.
+        </p>
+        
+        <h4 class="modal-section-title">Category Weights</h4>
+        <div class="weights-grid" id="modalWeightsGrid">
+          <!-- Populated dynamically -->
+        </div>
+
+        <h4 class="modal-section-title spaced">Scoring Principles</h4>
+        <ul class="principles-list">
+          <li><strong>Empirical Evidence Only:</strong> Neutral observations and positive security controls receive zero point deduction.</li>
+          <li><strong>Confidence Weighting:</strong> Confirmed issues incur 100% of their base deduction; potential indicators incur reduced deductions.</li>
+          <li><strong>Clamped Boundaries:</strong> Category scores never fall below 0 or exceed 100 points.</li>
+          <li><strong>Transparent Philosophy:</strong> A score of 84/100 reflects externally observable controls, not an absolute guarantee against compromise.</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="closeScoreModalFooterBtn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Share Toast Notification -->
+  <div id="toastNotification" class="toast-notification hidden" role="status" aria-live="polite">
+    <span id="toastMessage">Report permalink copied to clipboard!</span>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer" role="contentinfo">
+    <div class="container footer-content">
+      <p>EXPOSE Security Intelligence &copy; 2026. Evidence first. Intelligence second.</p>
+      <p class="footer-disclaimer">
+        Expose analyzes externally observable security behavior. A clean report does not guarantee that an application is completely secure.
+      </p>
+    </div>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

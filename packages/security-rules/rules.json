@@ -1,0 +1,52 @@
+{
+  "category_weights": {
+    "TRANSPORT_SECURITY": 25,
+    "CRYPTOGRAPHY": 20,
+    "DNS_CONFIGURATION": 15,
+    "EMAIL_SECURITY": 10,
+    "COOKIE_SECURITY": 15,
+    "SECURITY_METADATA": 5,
+    "INFORMATION_DISCLOSURE": 10
+  },
+  "severity_penalties": {
+    "CRITICAL": 35,
+    "HIGH": 20,
+    "MEDIUM": 10,
+    "LOW": 4,
+    "INFO": 0
+  },
+  "letter_grades": [
+    { "min_score": 90, "grade": "A" },
+    { "min_score": 80, "grade": "B" },
+    { "min_score": 70, "grade": "C" },
+    { "min_score": 60, "grade": "D" },
+    { "min_score": 0,  "grade": "F" }
+  ],
+  "not_assessed_boundaries": [
+    {
+      "area": "Authentication & Session Flow",
+      "reason": "Out of Scope for Public Non-Destructive Assessment",
+      "explanation": "Credential evaluation and authenticated bypass testing are strictly prohibited without authenticated tenant authorization."
+    },
+    {
+      "area": "Business Logic & Workflow Integrity",
+      "reason": "Requires Internal Application Knowledge",
+      "explanation": "Multi-step stateful workflows and business logic flaw validation cannot be assessed through non-intrusive external observation."
+    },
+    {
+      "area": "Active Code Injection (SQLi, RCE, Command Injection)",
+      "reason": "Prohibited Destructive Behavior",
+      "explanation": "Expose does not perform active payload injection, autonomous exploitation, or fuzzing against external hosts."
+    },
+    {
+      "area": "Internal Network & Cloud Infrastructure",
+      "reason": "Externally Inaccessible",
+      "explanation": "Internal VPC topologies, private endpoints, and backend databases behind reverse proxies are not observable from the public Internet."
+    },
+    {
+      "area": "Source Code & Dependency Tree",
+      "reason": "Static Code Analysis Boundary",
+      "explanation": "Client-side transpiled bundles are inspected, but proprietary backend repositories and build pipelines are not accessed."
+    }
+  ]
+}

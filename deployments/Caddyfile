@@ -1,0 +1,29 @@
+{
+    admin off
+}
+
+:80 {
+    # Security headers
+    header {
+        X-Content-Type-Options nosniff
+        X-Frame-Options DENY
+        Referrer-Policy strict-origin-when-cross-origin
+        Permissions-Policy "camera=(), microphone=(), geolocation=()"
+        -Server
+    }
+
+    # API routes to Go backend
+    handle /api/* {
+        reverse_proxy backend:8080
+    }
+
+    # Browser analysis worker routes
+    handle /browser/* {
+        reverse_proxy browser-worker:3001
+    }
+
+    # Next.js frontend
+    handle {
+        reverse_proxy frontend:3000
+    }
+}

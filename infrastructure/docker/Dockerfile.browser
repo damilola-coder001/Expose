@@ -1,0 +1,21 @@
+# Dockerfile for Playwright Browser Analysis Worker
+FROM mcr.microsoft.com/playwright:v1.48.0-noble
+
+WORKDIR /app
+
+COPY apps/browser-worker/package.json apps/browser-worker/package-lock.json* apps/browser-worker/tsconfig.json ./
+RUN npm install
+
+COPY apps/browser-worker/src/ ./src/
+RUN npm run build
+
+ENV NODE_ENV=production
+ENV PORT=3001
+ENV HOST=0.0.0.0
+
+EXPOSE 3001
+
+HEALTHCHECK --interval=5s --timeout=3s --retries=3 \
+  CMD curl -f http://localhost:3001/health || exit 1
+
+CMD ["node", "dist/server.js"]

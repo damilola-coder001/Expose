@@ -1,0 +1,98 @@
+version: '3.8'
+
+services:
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - backend
+      - frontend
+      - browser-worker
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: ../deployments/Dockerfile.backend
+    restart: unless-stopped
+    environment:
+      - PORT=8080
+      - DATABASE_URL=postgres://expose:expose_secure_pass@postgres:5432/expose?sslmode=disable
+      - REDIS_URL=redis://redis:6379
+      - BROWSER_WORKER_URL=http://browser-worker:3001
+      - LOG_LEVEL=info
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: ../deployments/Dockerfile.frontend
+    restart: unless-stopped
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:8080/api
+      - NODE_ENV=production
+    depends_on:
+      - backend
+
+  browser-worker:
+    build:
+      context: ../workers/browser
+      dockerfile: ../deployments/Dockerfile.browser
+    restart: unless-stopped
+    security_opt:
+      - "no-new-privileges:true"
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+    environment:
+      - PORT=3001
+      - TIMEOUT_MS=20000
+    # Mandatory Isolation (Phase 19): Zero PostgreSQL credentials provided to workers
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: expose
+      POSTGRES_PASSWORD: expose_secure_pass
+      POSTGRES_DB: expose
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ../backend/internal/storage/migrations/001_init.sql:/docker-entrypoint-initdb.d/001_init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U expose -d expose"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+  redis_data:
+  caddy_data:
+  caddy_config:

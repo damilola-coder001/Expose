@@ -1,0 +1,34 @@
+{
+  "app": {
+    "name": "EXPOSE",
+    "version": "0.1.0",
+    "tagline": "See what your website exposes.",
+    "env": "development"
+  },
+  "server": {
+    "port": 8080,
+    "read_timeout_seconds": 15,
+    "write_timeout_seconds": 30,
+    "idle_timeout_seconds": 60,
+    "cors_allowed_origins": ["http://localhost:3000", "http://127.0.0.1:3000"]
+  },
+  "database": {
+    "max_open_conns": 25,
+    "max_idle_conns": 5,
+    "conn_max_lifetime_minutes": 15
+  },
+  "redis": {
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 3,
+    "write_timeout_seconds": 3
+  },
+  "safety": {
+    "rate_limit_requests_per_second": 5.0,
+    "rate_limit_burst": 10,
+    "block_private_ips": true,
+    "max_scan_timeout_seconds": 45
+  },
+  "services": {
+    "browser_worker_url": "http://localhost:3001"
+  }
+}

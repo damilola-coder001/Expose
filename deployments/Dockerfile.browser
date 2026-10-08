@@ -1,0 +1,17 @@
+# Playwright browser analysis worker
+FROM mcr.microsoft.com/playwright:v1.48.0-noble
+
+WORKDIR /app
+
+COPY package.json package-lock.json* tsconfig.json ./
+RUN npm install
+
+COPY src/ ./src/
+RUN npm run build
+
+ENV NODE_ENV=production
+ENV PORT=3001
+
+EXPOSE 3001
+
+CMD ["node", "dist/server.js"]
