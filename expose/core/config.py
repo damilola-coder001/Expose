@@ -62,7 +62,7 @@ class ExposeConfig(BaseModel):
     def load_from_env(cls) -> "ExposeConfig":
         """Loads configuration from environment variables with safe defaults."""
         runtime_env = os.getenv("ENV") or (
-            "production" if os.getenv("VERCEL_ENV", "").lower() == "production" else "development"
+            "production" if (os.getenv("VERCEL") or os.getenv("VERCEL_ENV")) else "development"
         )
         raw_origins = os.getenv("CORS_ALLOWED_ORIGINS", "")
         if raw_origins:
@@ -113,6 +113,10 @@ class ExposeConfig(BaseModel):
         return {
             "version": "1.0.0",
             "env": self.env,
+            # Serverless functions cannot reliably retain the in-memory async
+            # scan store between requests. The browser uses this flag to select
+            # a same-request scan flow on Vercel.
+            "serverless_runtime": bool(os.getenv("VERCEL") or os.getenv("VERCEL_ENV")),
             "rate_limit_per_minute": self.rate_limit_per_minute,
             "scan_timeout_seconds": self.scan_timeout_seconds,
             "max_concurrent_scans": self.max_concurrent_scans,

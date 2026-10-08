@@ -85,6 +85,17 @@ def test_production_config_defaults_to_same_origin(monkeypatch):
     assert config.cors_allowed_origins == []
 
 
+def test_client_telemetry_marks_vercel_as_serverless(monkeypatch):
+    monkeypatch.setenv("VERCEL", "1")
+    monkeypatch.delenv("ENV", raising=False)
+
+    config = ExposeConfig.load_from_env()
+    telemetry = config.get_client_safe_telemetry()
+
+    assert telemetry["serverless_runtime"] is True
+    assert config.env == "production"
+
+
 def test_audit_logging_on_mutating_requests(client, caplog):
     import logging
     caplog.set_level(logging.INFO)

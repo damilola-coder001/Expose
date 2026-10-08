@@ -28,7 +28,10 @@ def test_env_example_exists_and_has_no_secrets():
 
     # Placeholders only: no live production secrets
     assert "your_gemini_or_anthropic_api_key_here" in content
-    assert "postgres://expose:expose_secure_pass@localhost:5432" in content
+    assert "postgresql://USERNAME:PASSWORD@HOST:5432" in content
+    assert "expose_secure_pass" not in content
+    database_line = next(line for line in content.splitlines() if line.startswith("DATABASE_URL="))
+    assert "sslmode=require" in database_line
 
 
 def test_gitignore_excludes_env_files():

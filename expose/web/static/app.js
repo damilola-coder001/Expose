@@ -7,6 +7,7 @@ let currentCategoryFilter = 'ALL';
 let searchQuery = '';
 let isPassedChecksExpanded = true;
 let activeAttackSurfaceTab = 'pages';
+let isServerlessRuntime = false;
 
 document.addEventListener('DOMContentLoaded', () => {
   // Theme Toggle Management
@@ -72,6 +73,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const findingSearchInput = document.getElementById('findingSearchInput');
   const clearSearchBtn = document.getElementById('clearSearchBtn');
 
+  // Serverless providers do not preserve process memory between requests.
+  // Detect that mode once so scans return their result in the initiating call.
+  fetch('/api/v1/config/telemetry', { cache: 'no-store' })
+    .then(response => response.ok ? response.json() : {})
+    .then(data => { isServerlessRuntime = data.serverless_runtime === true; })
+    .catch(() => { isServerlessRuntime = false; });
+
   // Rescan Action
   if (rescanBtn) {
     rescanBtn.addEventListener('click', () => {
@@ -99,6 +107,17 @@ document.addEventListener('DOMContentLoaded', () => {
   if (downloadJsonBtn) {
     downloadJsonBtn.addEventListener('click', () => {
       if (!currentScanResult) return;
+      if (isServerlessRuntime) {
+        const report = JSON.stringify(currentScanResult, null, 2);
+        const blob = new Blob([report], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `expose-${currentScanResult.scan_id}.json`;
+        link.click();
+        URL.revokeObjectURL(url);
+        return;
+      }
       window.location.href = `/api/v1/scans/${currentScanResult.scan_id}/export/json`;
     });
   }
@@ -107,6 +126,10 @@ document.addEventListener('DOMContentLoaded', () => {
   if (downloadSarifBtn) {
     downloadSarifBtn.addEventListener('click', () => {
       if (!currentScanResult) return;
+      if (isServerlessRuntime) {
+        showToast('SARIF export requires persistent report storage and is unavailable in this serverless deployment.');
+        return;
+      }
       window.location.href = `/api/v1/scans/${currentScanResult.scan_id}/export/sarif`;
     });
   }
@@ -258,15 +281,34 @@ document.addEventListener('DOMContentLoaded', () => {
     resetProbeMilestones();
 
     try {
+      const scanRequest = {
+        target: rawTarget,
+        allow_private: allowPrivateToggle.checked,
+        enable_ai: false // On-demand AI only
+      };
+
+      if (isServerlessRuntime) {
+        document.getElementById('scanProgressSubtitle').textContent = 'Running serverless assessment. This may take up to one minute.';
+        const syncResponse = await fetch('/api/v1/scans', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(scanRequest)
+        });
+        const data = await syncResponse.json();
+        if (!syncResponse.ok || !data.target) {
+          throw new Error(data.detail || 'Assessment failed to complete.');
+        }
+
+        currentScanResult = data;
+        renderScanResult(data);
+        return;
+      }
+
       // 1. Initiate asynchronous scan (Phase 24)
       const initResponse = await fetch('/api/v1/scans/async', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          target: rawTarget,
-          allow_private: allowPrivateToggle.checked,
-          enable_ai: false // On-demand AI only
-        })
+        body: JSON.stringify(scanRequest)
       });
 
       const initData = await initResponse.json();
@@ -328,7 +370,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       currentScanResult = data;
       renderScanResult(data);
-      fetchTargetHistoryAndDiff(data.target.host, data.scan_id);
+      if (!isServerlessRuntime) fetchTargetHistoryAndDiff(data.target.host, data.scan_id);
     } catch (err) {
       showError('Assessment Blocked / Error', err.message);
     } finally {
