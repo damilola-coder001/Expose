@@ -32,9 +32,10 @@ dev = [
 expose = "expose.cli.main:cli"
 
 [tool.vercel]
-# Explicitly select the FastAPI application during Vercel's Python build.
-# Without this, the monorepo's other Python modules look like candidates.
-entrypoint = "expose.api:app"
+# Point at the concrete module file rather than the package initializer.
+# This prevents Vercel from attempting to import ``expose/api/__init__.py``
+# as a handler path.
+entrypoint = "expose.api.app:app"
 
 [tool.setuptools.packages.find]
 where = ["."]
